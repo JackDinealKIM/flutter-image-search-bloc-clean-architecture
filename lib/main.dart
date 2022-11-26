@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
       darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-      home: const HomePage(),
+      home: const MainPage(),
       debugShowCheckedModeBanner: false,
       // initialRoute: HomePage.routeName,
       routes: routes,
@@ -21,16 +21,18 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatefulWidget {
-  static const String routeName = "/home";
+class MainPage extends StatefulWidget {
+  static const String routeName = "/main";
 
-  const HomePage({super.key});
+  const MainPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<MainPage> createState() => _MainPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _MainPageState extends State<MainPage> {
+  int index = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,18 +50,44 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+      bottomNavigationBar: NavigationBarTheme(
+        data: NavigationBarThemeData(
+          // indicatorColor: Colors.blue.shade100,
+          labelTextStyle: MaterialStateProperty.all(
+            const TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+        child: NavigationBar(
+          height: 60,
+          backgroundColor: Color(0xFFF1F5Fb),
+          selectedIndex: index,
+          onDestinationSelected: (index) => setState(() => this.index = index),
+          destinations: const [
+            NavigationDestination(
+              icon: Icon(Icons.search),
+              label: '검색',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.favorite),
+              label: '즐겨찾기',
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
 
 final Map<String, WidgetBuilder> routes = {
-  HomePage.routeName: (context) => const HomePage(),
+  MainPage.routeName: (context) => const MainPage(),
 };
-
 
 const lightColorScheme = ColorScheme(
   brightness: Brightness.light,
-  primary: Color(0xFF005AC1),
+  primary: primaryColor,
   onPrimary: Color(0xFFFFFFFF),
   primaryContainer: Color(0xFFD8E2FF),
   onPrimaryContainer: Color(0xFF001A41),
@@ -120,3 +148,5 @@ const darkColorScheme = ColorScheme(
   inversePrimary: Color(0xFF005AC1),
   surfaceTint: Color(0xFFADC6FF),
 );
+
+const primaryColor = Color(0xFF005AC1);
