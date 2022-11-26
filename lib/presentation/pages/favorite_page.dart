@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/image_grid_widget.dart';
 
 class FavoritePage extends StatefulWidget {
   const FavoritePage({Key? key}) : super(key: key);
@@ -10,16 +11,11 @@ class FavoritePage extends StatefulWidget {
 class _FavoritePageState extends State<FavoritePage> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            '여기에 즐겨찾기가 표시됩니다.',
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('즐겨찾는 이미지'),
       ),
+      body: const ImageGridWidget(),
     );
   }
 }

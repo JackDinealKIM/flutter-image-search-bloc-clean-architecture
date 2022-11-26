@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:search_images/presentation/widgets/image_grid_widget.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -8,36 +9,57 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  String keyword = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('이미지 검색'),
+        title: Text(keyword.isEmpty ? '이미지 검색' : "'$keyword'에 대한 검색 결과입니다."),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
-            onPressed: () {
-              showSearch(context: context, delegate: ImageSearchDelegate());
+            onPressed: () async {
+              final result = await showSearch(context: context, delegate: ImageSearchDelegate());
+
+              setState(() {
+                keyword = result ?? '';
+              });
+              print(keyword);
             },
           )
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              '여기에 검색결과가 표시됩니다.',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ],
-        ),
-      ),
+      body: keyword.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    '여기에 검색결과가 표시됩니다.',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ],
+              ),
+            )
+          : const ImageGridWidget(),
     );
   }
 }
 
-class ImageSearchDelegate extends SearchDelegate {
+class ImageSearchDelegate extends SearchDelegate<String> {
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return theme.copyWith(
+        // primaryColor: Colors.white,
+        // primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.green),
+        // textTheme: theme.textTheme.copyWith(
+        //   title: TextStyle(fontSize: 10, fontWeight: FontWeight.normal),
+        // ),
+        );
+  }
+
   List<String> searchResults = [
     '토끼',
     '강아지',
@@ -52,7 +74,7 @@ class ImageSearchDelegate extends SearchDelegate {
           icon: const Icon(Icons.clear),
           onPressed: () {
             if (query.isEmpty) {
-              close(context, null);
+              close(context, '');
             } else {
               query = '';
             }
@@ -63,15 +85,7 @@ class ImageSearchDelegate extends SearchDelegate {
   @override
   Widget? buildLeading(BuildContext context) => IconButton(
         icon: const Icon(Icons.arrow_back),
-        onPressed: () => close(context, null),
-      );
-
-  @override
-  Widget buildResults(BuildContext context) => Center(
-        child: Text(
-          query,
-          style: Theme.of(context).textTheme.bodyLarge,
-        ),
+        onPressed: () => close(context, ''),
       );
 
   @override
@@ -91,5 +105,11 @@ class ImageSearchDelegate extends SearchDelegate {
         );
       },
     );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) => close(context, query));
+    return Container();
   }
 }

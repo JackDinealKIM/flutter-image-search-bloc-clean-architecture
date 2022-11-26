@@ -14,8 +14,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
-      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: lightColorScheme,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: primaryBackgroundColor,
+          // This will be applied to the "back" icon
+          iconTheme: IconThemeData(color: Colors.black),
+          // This will be applied to the action icon buttons that locates on the right side
+          actionsIconTheme: IconThemeData(color: Colors.black),
+          centerTitle: true,
+          elevation: 15,
+          titleTextStyle: TextStyle(color: Colors.black),
+        ),
+      ),
+      // darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
       home: const MainPage(),
       debugShowCheckedModeBanner: false,
       // initialRoute: HomePage.routeName,
@@ -59,7 +72,7 @@ class _MainPageState extends State<MainPage> {
           labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
           animationDuration: const Duration(milliseconds: 500),
           height: 60,
-          backgroundColor: const Color(0xFFF1F5Fb),
+          backgroundColor: primaryBackgroundColor,
           selectedIndex: index,
           onDestinationSelected: (index) => setState(() => this.index = index),
           destinations: const [
@@ -149,3 +162,4 @@ const darkColorScheme = ColorScheme(
 );
 
 const primaryColor = Color(0xFF005AC1);
+const primaryBackgroundColor = Color(0xFFF1F5Fb);
