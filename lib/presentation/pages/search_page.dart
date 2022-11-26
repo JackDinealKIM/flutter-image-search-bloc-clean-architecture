@@ -32,7 +32,8 @@ class _SearchPageState extends State<SearchPage> {
                 _keyword = result ?? '';
               });
               print(_keyword);
-              BlocProvider.of<SearchBloc>(context).add(GetSearchImages(_keyword));
+
+              BlocProvider.of<SearchBloc>(context).add(GetSearchImagesEvent(_keyword));
             },
           )
         ],

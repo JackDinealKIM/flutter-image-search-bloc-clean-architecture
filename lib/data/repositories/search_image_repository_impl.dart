@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:search_images/core/error/exceptions.dart';
 import 'package:search_images/core/error/failures.dart';
 import 'package:search_images/data/datasources/search_image_remote_data_source.dart';
 import 'package:search_images/data/model/search_image_model.dart';
@@ -16,7 +17,7 @@ class SearchImageRepositoryImpl extends SearchImageRepository {
     try {
       final List<SearchImageModel> remoteImages = await remoteDataSource.getImages(query);
       return Right(remoteImages.map((image) => SearchImage.fromJson(image)).toList());
-    } on ServerFailure {
+    } catch(e) {
       return Left(ServerFailure());
     }
   }

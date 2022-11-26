@@ -16,6 +16,16 @@ class SearchImage extends Equatable {
     required this.dateTime,
   });
 
+  factory SearchImage.copyWith(SearchImage image) {
+    return SearchImage(
+      siteName: image.siteName,
+      thumbnailUrl: image.thumbnailUrl,
+      imageUrl: image.imageUrl,
+      isFavorited: !image.isFavorited,
+      dateTime: image.dateTime,
+    );
+  }
+
   factory SearchImage.fromJson(SearchImageModel searchImageModel) {
     return SearchImage(
       siteName: searchImageModel.display_sitename,

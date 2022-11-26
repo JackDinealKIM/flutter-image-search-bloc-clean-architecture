@@ -15,6 +15,7 @@ class MessageWidget extends StatelessWidget {
           Text(
             message,
             style: Theme.of(context).textTheme.bodyMedium,
+            textAlign: TextAlign.center,
           ),
         ],
       ),

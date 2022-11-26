@@ -18,19 +18,27 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   SearchBloc({required this.getSearchImageUsecase}) : super(Empty()) {
     on<SearchEvent>((event, emit) async {
-      if (event is GetSearchImages) {
+      if (event is GetSearchImagesEvent) {
         emit(Loading());
         final failureOrImages = await getSearchImageUsecase(Params(event.query));
-        emit(await _eitherLoadedOrErrorState(failureOrImages, event.query).single);
+        emit(await _eitherLoadedOrErrorState(failureOrImages).single);
+      } else if (event is UpdateSearchImageEvent) {
+        emit(await _update(index: event.index, image: event.image).single);
       }
     });
   }
 
-  Stream<SearchState> _eitherLoadedOrErrorState(Either<Failure, List<SearchImage>> either, String query) async* {
+  Stream<SearchState> _eitherLoadedOrErrorState(Either<Failure, List<SearchImage>> either) async* {
     yield either.fold(
       (failure) => Error(_mapFailureToMessage(failure)),
-      (images) => Loaded(images: images, query: query),
+      (images) => Loaded(images: images),
     );
+  }
+
+  Stream<SearchState> _update({required int index, required SearchImage image}) async* {
+    List<SearchImage> list = List.of((state as Loaded).images);
+    list[index] = image;
+    yield (state as Loaded).update(list);
   }
 
   String _mapFailureToMessage(Failure failure) {
