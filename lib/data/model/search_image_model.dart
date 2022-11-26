@@ -24,7 +24,7 @@ class SearchImageModel {
   factory SearchImageModel.fromJson(Map<String, dynamic> json) {
     return SearchImageModel(
       display_sitename: json['display_sitename'],
-      thumbnail_url: json['display_sitename'],
+      thumbnail_url: json['thumbnail_url'],
       image_url: json['image_url'],
     );
   }

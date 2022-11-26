@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:search_images/presentation/widgets/message_widget.dart';
 import 'package:search_images/presentation/widgets/image_grid_widget.dart';
+
+import '../../core/di/injection.dart';
+import '../bloc/search/search_bloc.dart';
+import '../widgets/loading_widget.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -9,13 +15,13 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  String keyword = '';
+  String _keyword = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(keyword.isEmpty ? '이미지 검색' : "'$keyword'에 대한 검색 결과입니다."),
+        title: Text(_keyword.isEmpty ? '이미지 검색' : "'$_keyword'에 대한 검색 결과입니다."),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -23,27 +29,33 @@ class _SearchPageState extends State<SearchPage> {
               final result = await showSearch(context: context, delegate: ImageSearchDelegate());
 
               setState(() {
-                keyword = result ?? '';
+                _keyword = result ?? '';
               });
-              print(keyword);
+              print(_keyword);
+              BlocProvider.of<SearchBloc>(context).add(GetSearchImages(_keyword));
             },
           )
         ],
       ),
-      body: keyword.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    '여기에 검색결과가 표시됩니다.',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ],
-              ),
-            )
-          : const ImageGridWidget(),
+      body: _bodyContainer(context),
     );
+  }
+
+  Widget _bodyContainer(BuildContext context) {
+    return BlocBuilder<SearchBloc, SearchState>(builder: (_, state) {
+      if (state is Empty) {
+        return MessageWidget(message: '여기에 검색결과가 표시됩니다.', context: context);
+        // return const Text('여기에 검색결과가 표시됩니다.');
+      } else if (state is Loading) {
+        return const LoadingWidget();
+      } else if (state is Loaded) {
+        return ImageGridWidget(images: state.images);
+      } else if (state is Error) {
+        return MessageWidget(message: '오류가 발생하였습니다.\n(${state.message})', context: context);
+        // return Text('오류가 발생하였습니다.\n(${state.message})');
+      }
+      return Container();
+    });
   }
 }
 

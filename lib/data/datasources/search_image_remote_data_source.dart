@@ -11,7 +11,7 @@ abstract class SearchImageRemoteDataSource {
 class SearchImageRemoteDataSourceImpl implements SearchImageRemoteDataSource {
   final Dio dio;
 
-  SearchImageRemoteDataSourceImpl(this.dio);
+  SearchImageRemoteDataSourceImpl({required this.dio});
 
   @override
   Future<List<SearchImageModel>> getImages(String query) async {

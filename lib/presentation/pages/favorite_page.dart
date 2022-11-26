@@ -15,7 +15,7 @@ class _FavoritePageState extends State<FavoritePage> {
       appBar: AppBar(
         title: const Text('즐겨찾는 이미지'),
       ),
-      body: const ImageGridWidget(),
+      body: const ImageGridWidget(images : []),
     );
   }
 }

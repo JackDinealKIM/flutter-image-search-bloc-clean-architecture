@@ -1,33 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../../domain/entities/search_image.dart';
 import '../pages/image_page.dart';
 
 class ImageGridWidget extends StatelessWidget {
-  const ImageGridWidget({Key? key}) : super(key: key);
+  final List<SearchImage> images;
+
+  const ImageGridWidget({super.key, required this.images});
 
   @override
   Widget build(BuildContext context) {
-    List<String> images = <String>[
-      'https://photo.tuchong.com/4870004/f/298584322.jpg',
-      'https://photo.tuchong.com/16389644/f/1303840119.jpg',
-      'https://photo.tuchong.com/1924454/f/153280211.jpg',
-      'https://photo.tuchong.com/2353448/f/147183522.jpg',
-      'https://photo.tuchong.com/2732194/f/514055506.jpg',
-      'https://photo.tuchong.com/12772247/f/950208723.jpg',
-      'https://photo.tuchong.com/4870004/f/298584322.jpg',
-      'https://photo.tuchong.com/16389644/f/1303840119.jpg',
-      'https://photo.tuchong.com/1924454/f/153280211.jpg',
-      'https://photo.tuchong.com/2353448/f/147183522.jpg',
-      'https://photo.tuchong.com/2732194/f/514055506.jpg',
-      'https://photo.tuchong.com/12772247/f/950208723.jpg',
-      'https://photo.tuchong.com/4870004/f/298584322.jpg',
-      'https://photo.tuchong.com/16389644/f/1303840119.jpg',
-      'https://photo.tuchong.com/1924454/f/153280211.jpg',
-      'https://photo.tuchong.com/2353448/f/147183522.jpg',
-      'https://photo.tuchong.com/2732194/f/514055506.jpg',
-      'https://photo.tuchong.com/12772247/f/950208723.jpg',
-    ];
-
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
@@ -35,22 +17,49 @@ class ImageGridWidget extends StatelessWidget {
         mainAxisSpacing: 2.0,
       ),
       itemBuilder: (BuildContext s, int index) {
-        return _imageBody(context: context, imageUrl: images[index]);
+        return _imageBody(context: context, image: images[index]);
       },
       itemCount: images.length,
-      // shrinkWrap: true,
     );
   }
 
-  Widget _imageBody({required BuildContext context, required String imageUrl}) {
+  Widget _imageBody({required BuildContext context, required SearchImage image}) {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, ImagePage.routeName, arguments: {'imageUrl': imageUrl, 'title': 'test'}),
+      onTap: () => Navigator.pushNamed(context, ImagePage.routeName, arguments: {'imageUrl': image.imageUrl, 'title': image.siteName}),
       child: Stack(
         children: [
           Image.network(
-            imageUrl,
-            fit: BoxFit.fill,
-          )
+            image.thumbnailUrl,
+            fit: BoxFit.cover,
+          ),
+          Positioned(
+            top: 0,
+            left: 0,
+            child: Container(
+              margin: const EdgeInsets.all(8),
+              child: Text(
+                image.siteName,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: Container(
+              height: 50,
+              width: 50,
+              child: IconButton(
+                onPressed: () {
+                  // TODO reverse current favorite status
+                },
+                icon: Icon(
+                  image.isFavorited ? Icons.favorite : Icons.favorite_outline,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

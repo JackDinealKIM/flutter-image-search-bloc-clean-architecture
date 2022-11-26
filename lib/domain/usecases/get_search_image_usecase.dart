@@ -20,7 +20,7 @@ class GetSearchImageUsecase implements UseCase<List<SearchImage>, Params> {
 class Params extends Equatable {
   final String query;
 
-  const Params({required this.query});
+  const Params(this.query);
 
   @override
   List<Object?> get props => [query];

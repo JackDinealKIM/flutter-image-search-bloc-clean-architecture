@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:search_images/presentation/pages/favorite_page.dart';
 import 'package:search_images/presentation/pages/image_page.dart';
-
+import 'core/di/injection.dart';
+import 'presentation/bloc/search/search_bloc.dart';
 import 'presentation/pages/search_page.dart';
+import '../../core/di/injection.dart' as di;
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  await di.init();
+
+  final multiBlocProvider = MultiBlocProvider(
+    providers: [
+      BlocProvider(
+        create: (BuildContext context) => sl<SearchBloc>(),
+      ),
+    ],
+    child: const MyApp(),
+  );
+
+  runApp(multiBlocProvider);
 }
 
 class MyApp extends StatelessWidget {
@@ -48,9 +62,9 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int index = 0;
+  int _selectedIndex = 0;
 
-  final screens = [
+  final _screens = [
     const SearchPage(),
     const FavoritePage(),
   ];
@@ -58,7 +72,10 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: screens[index],
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _screens,
+      ),
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
           // indicatorColor: Colors.blue.shade100,
@@ -74,8 +91,8 @@ class _MainPageState extends State<MainPage> {
           animationDuration: const Duration(milliseconds: 500),
           height: 60,
           backgroundColor: lightColorScheme.primary,
-          selectedIndex: index,
-          onDestinationSelected: (index) => setState(() => this.index = index),
+          selectedIndex: _selectedIndex,
+          onDestinationSelected: (index) => setState(() => this._selectedIndex = index),
           destinations: const [
             NavigationDestination(
               icon: Icon(Icons.search_outlined),

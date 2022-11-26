@@ -9,9 +9,7 @@ import '../../domain/repositories/search_image_repository.dart';
 class SearchImageRepositoryImpl extends SearchImageRepository {
   final SearchImageRemoteDataSource remoteDataSource;
 
-  SearchImageRepositoryImpl({
-    required this.remoteDataSource,
-  });
+  SearchImageRepositoryImpl({required this.remoteDataSource});
 
   @override
   Future<Either<Failure, List<SearchImage>>> getImages(String query) async {
