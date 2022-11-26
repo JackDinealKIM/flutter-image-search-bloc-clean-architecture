@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:search_images/presentation/pages/favorite_page.dart';
+
+import 'presentation/pages/search_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,23 +36,18 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int index = 0;
 
+  final screens = [
+    const SearchPage(),
+    const FavoritePage(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('이미지 검색'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              '여기에 검색 결과가 표시됩니다.',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ],
-        ),
-      ),
+      body: screens[index],
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
           // indicatorColor: Colors.blue.shade100,
@@ -61,17 +59,21 @@ class _MainPageState extends State<MainPage> {
           ),
         ),
         child: NavigationBar(
+          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+          animationDuration: const Duration(milliseconds: 500),
           height: 60,
-          backgroundColor: Color(0xFFF1F5Fb),
+          backgroundColor: const Color(0xFFF1F5Fb),
           selectedIndex: index,
           onDestinationSelected: (index) => setState(() => this.index = index),
           destinations: const [
             NavigationDestination(
-              icon: Icon(Icons.search),
+              icon: Icon(Icons.search_outlined),
+              selectedIcon: Icon(Icons.search),
               label: '검색',
             ),
             NavigationDestination(
-              icon: Icon(Icons.favorite),
+              icon: Icon(Icons.favorite_outline),
+              selectedIcon: Icon(Icons.favorite),
               label: '즐겨찾기',
             ),
           ],
