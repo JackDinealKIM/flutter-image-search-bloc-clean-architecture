@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:search_images/presentation/pages/favorite_page.dart';
+import 'package:search_images/presentation/pages/image_page.dart';
 
 import 'presentation/pages/search_page.dart';
 
@@ -95,6 +96,7 @@ class _MainPageState extends State<MainPage> {
 
 final Map<String, WidgetBuilder> routes = {
   MainPage.routeName: (context) => const MainPage(),
+  ImagePage.routeName: (context) => const ImagePage(),
 };
 
 const lightColorScheme = ColorScheme(

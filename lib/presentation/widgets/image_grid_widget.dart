@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../pages/image_page.dart';
+
 class ImageGridWidget extends StatelessWidget {
   const ImageGridWidget({Key? key}) : super(key: key);
 
@@ -33,13 +35,24 @@ class ImageGridWidget extends StatelessWidget {
         mainAxisSpacing: 2.0,
       ),
       itemBuilder: (BuildContext s, int index) {
-        return Image.network(
-          images[index],
-          fit: BoxFit.cover,
-        );
+        return _imageBody(context: context, imageUrl: images[index]);
       },
       itemCount: images.length,
       // shrinkWrap: true,
+    );
+  }
+
+  Widget _imageBody({required BuildContext context, required String imageUrl}) {
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(context, ImagePage.routeName, arguments: {'imageUrl': imageUrl, 'title': 'test'}),
+      child: Stack(
+        children: [
+          Image.network(
+            imageUrl,
+            fit: BoxFit.cover,
+          )
+        ],
+      ),
     );
   }
 }
