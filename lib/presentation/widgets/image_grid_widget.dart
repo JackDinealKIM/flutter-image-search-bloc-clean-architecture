@@ -49,7 +49,7 @@ class ImageGridWidget extends StatelessWidget {
         children: [
           Image.network(
             imageUrl,
-            fit: BoxFit.cover,
+            fit: BoxFit.fill,
           )
         ],
       ),

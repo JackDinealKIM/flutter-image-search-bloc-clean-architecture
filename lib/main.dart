@@ -18,18 +18,18 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: lightColorScheme,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: primaryBackgroundColor,
+        appBarTheme: AppBarTheme(
+          backgroundColor: lightColorScheme.primary,
           // This will be applied to the "back" icon
-          iconTheme: IconThemeData(color: Colors.black),
+          iconTheme: const IconThemeData(color: Colors.black),
           // This will be applied to the action icon buttons that locates on the right side
-          actionsIconTheme: IconThemeData(color: Colors.black),
+          actionsIconTheme: const IconThemeData(color: Colors.black),
           centerTitle: true,
           elevation: 15,
-          titleTextStyle: TextStyle(color: Colors.black),
+          titleTextStyle: const TextStyle(color: Colors.black),
         ),
       ),
-      // darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
       home: const MainPage(),
       debugShowCheckedModeBanner: false,
       // initialRoute: HomePage.routeName,
@@ -73,7 +73,7 @@ class _MainPageState extends State<MainPage> {
           labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
           animationDuration: const Duration(milliseconds: 500),
           height: 60,
-          backgroundColor: primaryBackgroundColor,
+          backgroundColor: lightColorScheme.primary,
           selectedIndex: index,
           onDestinationSelected: (index) => setState(() => this.index = index),
           destinations: const [
@@ -101,7 +101,7 @@ final Map<String, WidgetBuilder> routes = {
 
 const lightColorScheme = ColorScheme(
   brightness: Brightness.light,
-  primary: primaryColor,
+  primary: Color(0xFFADC6FF),
   onPrimary: Color(0xFFFFFFFF),
   primaryContainer: Color(0xFFD8E2FF),
   onPrimaryContainer: Color(0xFF001A41),
@@ -163,5 +163,5 @@ const darkColorScheme = ColorScheme(
   surfaceTint: Color(0xFFADC6FF),
 );
 
-const primaryColor = Color(0xFF005AC1);
-const primaryBackgroundColor = Color(0xFFF1F5Fb);
+// const primaryColor = Color(0xFF005AC1);
+// const primaryBackgroundColor = Color(0xFFF1F5Fb);
