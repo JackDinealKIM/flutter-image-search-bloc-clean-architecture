@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/entities/search_image.dart';
-import '../bloc/search/search_bloc.dart';
+import '../bloc/favorite/favorite_bloc.dart' as fb;
+import '../bloc/search/search_bloc.dart' as sb;
 import '../pages/image_page.dart';
 
 class ImageGridWidget extends StatelessWidget {
   final List<SearchImage> images;
-  final bool isFavorited;
+  final bool isSearchTab;
 
-  const ImageGridWidget({super.key, required this.images, this.isFavorited = false});
+  const ImageGridWidget({super.key, required this.images, this.isSearchTab = false});
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +30,17 @@ class ImageGridWidget extends StatelessWidget {
   Widget _imageBody({required BuildContext context, required int index}) {
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, ImagePage.routeName, arguments: {'imageUrl': images[index].imageUrl, 'title': images[index].siteName}),
-      child: isFavorited ? _imageContainer(thumbnailUrl: images[index].thumbnailUrl) : _resultContainer(index: index, context: context),
+      child: _resultContainer(index: index, context: context),
     );
   }
 
   Widget _resultContainer({required int index, required BuildContext context}) {
     return Stack(
       children: [
-        _imageContainer(thumbnailUrl: images[index].thumbnailUrl),
+        Image.network(
+          images[index].thumbnailUrl,
+          fit: BoxFit.cover,
+        ),
         Positioned(
           top: 0,
           left: 0,
@@ -56,8 +60,28 @@ class ImageGridWidget extends StatelessWidget {
             width: 50,
             child: IconButton(
               onPressed: () {
-                final searchBloc = context.read<SearchBloc>();
-                searchBloc.add(UpdateSearchImageEvent(image: SearchImage.copyWith((searchBloc.state as Loaded).images[index]), index: index));
+                // 검색 Tab
+
+                final searchBloc = context.read<sb.SearchBloc>();
+                if (isSearchTab) {
+                  final SearchImage selectedImage = (searchBloc.state as sb.Loaded).images[index];
+                  final image = SearchImage.copyWith(image: selectedImage, isFavorited: !selectedImage.isFavorited);
+                  if (image.isFavorited) {
+                    searchBloc.add(sb.GetSearchImageAddFavoriteEvent(image: image));
+                  } else {
+                    searchBloc.add(sb.GetSearchImageRemoveFavoriteEvent(image: image));
+                  }
+                }
+
+                final favoriteBloc = context.read<fb.FavoriteBloc>();
+                final image = SearchImage.copyWith(image: images[index], isFavorited: !images[index].isFavorited);
+                if (image.isFavorited) {
+                  favoriteBloc.add(fb.GetCachedImageAddEvent(image));
+                  searchBloc.add(sb.GetSearchImageAddFavoriteEvent(image: image));
+                } else {
+                  favoriteBloc.add(fb.GetCachedImageRemoveEvent(image));
+                  searchBloc.add(sb.GetSearchImageRemoveFavoriteEvent(image: image));
+                }
               },
               icon: Icon(
                 images[index].isFavorited ? Icons.favorite : Icons.favorite_outline,
@@ -67,13 +91,6 @@ class ImageGridWidget extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _imageContainer({required String thumbnailUrl}) {
-    return Image.network(
-      thumbnailUrl,
-      fit: BoxFit.cover,
     );
   }
 }

@@ -1,26 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:search_images/data/model/cached_image_model.dart';
 import 'package:search_images/presentation/pages/favorite_page.dart';
 import 'package:search_images/presentation/pages/image_page.dart';
 import 'core/di/injection.dart';
+import 'presentation/bloc/favorite/favorite_bloc.dart';
 import 'presentation/bloc/search/search_bloc.dart';
 import 'presentation/pages/search_page.dart';
 import '../../core/di/injection.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // di init
   await di.init();
 
-  final multiBlocProvider = MultiBlocProvider(
-    providers: [
-      BlocProvider(
-        create: (BuildContext context) => sl<SearchBloc>(),
-      ),
-    ],
-    child: const MyApp(),
-  );
+  // init hive
+  await Hive.initFlutter();
+  Hive.registerAdapter(CachedImageModelAdapter());
 
-  runApp(multiBlocProvider);
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (BuildContext context) => sl<FavoriteBloc>(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => sl<SearchBloc>(),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

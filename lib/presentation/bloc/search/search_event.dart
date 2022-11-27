@@ -11,12 +11,20 @@ class GetSearchImagesEvent extends SearchEvent {
   List<Object?> get props => [query];
 }
 
-class UpdateSearchImageEvent extends SearchEvent {
+class GetSearchImageAddFavoriteEvent extends SearchEvent {
   final SearchImage image;
-  final int index;
 
-  UpdateSearchImageEvent({required this.image, required this.index});
+  GetSearchImageAddFavoriteEvent({required this.image});
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [image];
+}
+
+class GetSearchImageRemoveFavoriteEvent extends SearchEvent {
+  final SearchImage image;
+
+  GetSearchImageRemoveFavoriteEvent({required this.image});
+
+  @override
+  List<Object?> get props => [image];
 }

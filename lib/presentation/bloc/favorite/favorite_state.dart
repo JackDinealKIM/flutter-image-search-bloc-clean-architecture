@@ -1,18 +1,19 @@
-part of 'search_bloc.dart';
+part of 'favorite_bloc.dart';
 
-abstract class SearchState extends Equatable {}
+@immutable
+abstract class FavoriteState extends Equatable {}
 
-class Initial extends SearchState {
+class Initial extends FavoriteState {
   @override
   List<Object> get props => [];
 }
 
-class Loading extends SearchState {
+class Loading extends FavoriteState {
   @override
   List<Object> get props => [];
 }
 
-class Loaded extends SearchState {
+class Loaded extends FavoriteState {
   final List<SearchImage> images;
 
   Loaded({required this.images});
@@ -23,7 +24,7 @@ class Loaded extends SearchState {
   List<Object> get props => [images];
 }
 
-class Error extends SearchState {
+class Error extends FavoriteState {
   final String message;
 
   Error(this.message);

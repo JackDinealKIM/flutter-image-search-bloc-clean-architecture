@@ -44,13 +44,16 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget _bodyContainer(BuildContext context) {
     return BlocBuilder<SearchBloc, SearchState>(builder: (_, state) {
-      if (state is Empty) {
+      if (state is Initial) {
         return MessageWidget(message: '여기에 검색결과가 표시됩니다.', context: context);
         // return const Text('여기에 검색결과가 표시됩니다.');
       } else if (state is Loading) {
         return const LoadingWidget();
       } else if (state is Loaded) {
-        return ImageGridWidget(images: state.images);
+        return ImageGridWidget(
+          images: state.images,
+          isSearchTab: true,
+        );
       } else if (state is Error) {
         return MessageWidget(message: '오류가 발생하였습니다.\n(${state.message})', context: context);
         // return Text('오류가 발생하였습니다.\n(${state.message})');

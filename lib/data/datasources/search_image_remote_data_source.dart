@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:search_images/core/error/exceptions.dart';
 import 'package:search_images/data/model/search_image_model.dart';
-
 import '../../core/const.dart';
 
 abstract class SearchImageRemoteDataSource {
