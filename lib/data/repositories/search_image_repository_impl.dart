@@ -5,6 +5,7 @@ import 'package:search_images/data/model/search_image_model.dart';
 import 'package:search_images/domain/entities/search_image.dart';
 
 import '../../domain/repositories/search_image_repository.dart';
+import '../../domain/usecases/get_search_image_usecase.dart';
 
 class SearchImageRepositoryImpl extends SearchImageRepository {
   final SearchImageRemoteDataSource dataSource;
@@ -12,9 +13,9 @@ class SearchImageRepositoryImpl extends SearchImageRepository {
   SearchImageRepositoryImpl({required this.dataSource});
 
   @override
-  Future<Either<Failure, List<SearchImage>>> getImages(String query) async {
+  Future<Either<Failure, List<SearchImage>>> getImages(Params params) async {
     try {
-      final List<SearchImageModel> remoteImages = await dataSource.getImages(query);
+      final List<SearchImageModel> remoteImages = await dataSource.getImages(params);
       return Right(remoteImages.map((image) => SearchImage.fromJson(image)).toList());
     } catch(e) {
       return Left(ServerFailure());

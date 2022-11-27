@@ -14,13 +14,12 @@ class Loading extends SearchState {
 
 class Loaded extends SearchState {
   final List<SearchImage> images;
+  final int page;
 
-  Loaded({required this.images});
-
-  Loaded update(List<SearchImage> list) => Loaded(images: list);
+  Loaded({required this.images, this.page = 1});
 
   @override
-  List<Object> get props => [images];
+  List<Object> get props => [images, page];
 }
 
 class Error extends SearchState {

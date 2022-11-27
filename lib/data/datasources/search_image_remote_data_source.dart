@@ -2,9 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:search_images/core/error/exceptions.dart';
 import 'package:search_images/data/model/search_image_model.dart';
 import '../../core/const.dart';
+import '../../domain/usecases/get_search_image_usecase.dart';
 
 abstract class SearchImageRemoteDataSource {
-  Future<List<SearchImageModel>> getImages(String query);
+  Future<List<SearchImageModel>> getImages(Params params);
 }
 
 class SearchImageRemoteDataSourceImpl implements SearchImageRemoteDataSource {
@@ -13,10 +14,10 @@ class SearchImageRemoteDataSourceImpl implements SearchImageRemoteDataSource {
   SearchImageRemoteDataSourceImpl({required this.dio});
 
   @override
-  Future<List<SearchImageModel>> getImages(String query) async {
+  Future<List<SearchImageModel>> getImages(Params params) async {
     try {
       final response = await dio.get(
-        '$KAKAO_SEARCH_URL$query',
+        '$KAKAO_SEARCH_URL${params.query}&page=${params.page}',
         options: Options(
           headers: {
             "Authorization": KAKAO_AUTHORIZATION,

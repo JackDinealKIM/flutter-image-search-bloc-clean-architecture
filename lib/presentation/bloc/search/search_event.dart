@@ -4,11 +4,12 @@ abstract class SearchEvent extends Equatable {}
 
 class GetSearchImagesEvent extends SearchEvent {
   final String query;
+  final int page;
 
-  GetSearchImagesEvent(this.query);
+  GetSearchImagesEvent({required this.query, this.page = 1});
 
   @override
-  List<Object?> get props => [query];
+  List<Object?> get props => [query, page];
 }
 
 class GetSearchImageAddFavoriteEvent extends SearchEvent {

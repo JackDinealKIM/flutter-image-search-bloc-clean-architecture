@@ -15,13 +15,13 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  String _keyword = '';
+  String _query = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_keyword.isEmpty ? '이미지 검색' : "'$_keyword'에 대한 검색 결과입니다."),
+        title: Text(_query.isEmpty ? '이미지 검색' : "'$_query'에 대한 검색 결과입니다."),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -29,11 +29,11 @@ class _SearchPageState extends State<SearchPage> {
               final result = await showSearch(context: context, delegate: ImageSearchDelegate());
 
               setState(() {
-                _keyword = result ?? '';
+                _query = result ?? '';
               });
-              print(_keyword);
+              print(_query);
 
-              BlocProvider.of<SearchBloc>(context).add(GetSearchImagesEvent(_keyword));
+              BlocProvider.of<SearchBloc>(context).add(GetSearchImagesEvent(query: _query, page: 1));
             },
           )
         ],
@@ -52,6 +52,8 @@ class _SearchPageState extends State<SearchPage> {
       } else if (state is Loaded) {
         return ImageGridWidget(
           images: state.images,
+          currentPage: state.page,
+          query: _query,
           isSearchTab: true,
         );
       } else if (state is Error) {
@@ -80,8 +82,13 @@ class ImageSearchDelegate extends SearchDelegate<String> {
     '토끼',
     '강아지',
     '염소',
+    '원숭이',
+    '돼지',
+    '호랑이',
     '말',
     '닭',
+    '양',
+    '쥐',
   ];
 
   @override

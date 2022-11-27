@@ -1,29 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../core/log.dart';
 import '../../domain/entities/search_image.dart';
 import '../bloc/favorite/favorite_bloc.dart' as fb;
 import '../bloc/search/search_bloc.dart' as sb;
+import '../bloc/search/search_bloc.dart';
 import '../pages/image_page.dart';
 
 class ImageGridWidget extends StatelessWidget {
   final List<SearchImage> images;
   final bool isSearchTab;
+  final int currentPage;
+  final String query;
 
-  const ImageGridWidget({super.key, required this.images, this.isSearchTab = false});
+  ImageGridWidget({
+    super.key,
+    required this.images,
+    this.currentPage = 1,
+    this.query = '',
+    this.isSearchTab = false,
+  });
+
+  bool _isLoading  = false;
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 2.0,
-        mainAxisSpacing: 2.0,
-      ),
-      itemBuilder: (BuildContext s, int index) {
-        return _imageBody(context: context, index: index);
+    return NotificationListener<ScrollNotification>(
+      onNotification: (sn) {
+        if (!_isLoading && sn is ScrollUpdateNotification && sn.metrics.pixels == sn.metrics.maxScrollExtent) {
+          _isLoading = true;
+          BlocProvider.of<SearchBloc>(context).add(GetSearchImagesEvent(query: query, page: currentPage + 1));
+        }
+        return false;
       },
-      itemCount: images.length,
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          crossAxisSpacing: 2.0,
+          mainAxisSpacing: 2.0,
+        ),
+        itemBuilder: (BuildContext s, int index) {
+          return _imageBody(context: context, index: index);
+        },
+        itemCount: images.length,
+      ),
     );
   }
 
