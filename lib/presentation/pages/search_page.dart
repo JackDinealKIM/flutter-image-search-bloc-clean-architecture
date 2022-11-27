@@ -33,7 +33,9 @@ class _SearchPageState extends State<SearchPage> {
               });
               print(_query);
 
-              BlocProvider.of<SearchBloc>(context).add(GetSearchImagesEvent(query: _query, page: 1));
+              if(_query.isNotEmpty) {
+                BlocProvider.of<SearchBloc>(context).add(GetSearchImagesEvent(query: _query, page: 1));
+              }
             },
           )
         ],
