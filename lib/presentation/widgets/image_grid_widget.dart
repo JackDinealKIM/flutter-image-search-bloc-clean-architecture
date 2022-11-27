@@ -28,7 +28,7 @@ class ImageGridWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return NotificationListener<ScrollNotification>(
       onNotification: (sn) {
-        if (!_isLoading && sn is ScrollUpdateNotification && sn.metrics.pixels == sn.metrics.maxScrollExtent) {
+        if (query.isNotEmpty && !_isLoading && sn is ScrollUpdateNotification && sn.metrics.pixels == sn.metrics.maxScrollExtent) {
           _isLoading = true;
           BlocProvider.of<SearchBloc>(context).add(GetSearchImagesEvent(query: query, page: currentPage + 1));
         }
