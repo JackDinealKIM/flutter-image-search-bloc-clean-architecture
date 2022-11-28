@@ -51,7 +51,10 @@ class ImageGridWidget extends StatelessWidget {
   Widget _imageBody({required BuildContext context, required int index}) {
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, ImagePage.routeName, arguments: {'imageUrl': images[index].imageUrl, 'title': images[index].siteName}),
-      child: _resultContainer(index: index, context: context),
+      child: _resultContainer(
+        index: index,
+        context: context,
+      ),
     );
   }
 

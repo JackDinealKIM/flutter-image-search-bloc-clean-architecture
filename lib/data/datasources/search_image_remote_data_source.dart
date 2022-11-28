@@ -17,7 +17,8 @@ class SearchImageRemoteDataSourceImpl implements SearchImageRemoteDataSource {
   Future<List<SearchImageModel>> getImages(Params params) async {
     try {
       final response = await dio.get(
-        '$KAKAO_SEARCH_URL${params.query}&page=${params.page}',
+        KAKAO_SEARCH_URL,
+        queryParameters: {'query' : params.query, 'page' : params.page},
         options: Options(
           headers: {
             "Authorization": KAKAO_AUTHORIZATION,

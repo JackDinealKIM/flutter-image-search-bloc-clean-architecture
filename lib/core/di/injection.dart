@@ -13,6 +13,7 @@ import '../../domain/usecases/get_cached_image_remove_usecase.dart';
 import '../../domain/usecases/get_cached_image_usecase.dart';
 import '../../presentation/bloc/favorite/favorite_bloc.dart';
 import '../../presentation/bloc/search/search_bloc.dart';
+import '../const.dart';
 import '../interceptor/dio_interceptor.dart';
 
 final sl = GetIt.instance;
@@ -64,7 +65,7 @@ Future<void> init() async {
 }
 
 Dio getDio() {
-  final dio = Dio();
+  final dio = Dio(BaseOptions(baseUrl: BASE_URL));
   dio.interceptors.add(DioInterceptor());
   return dio;
 }
