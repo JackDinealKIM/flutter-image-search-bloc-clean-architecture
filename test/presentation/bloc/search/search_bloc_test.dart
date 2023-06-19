@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:search_images/core/const.dart';
@@ -11,23 +12,15 @@ import 'package:search_images/domain/usecases/get_cached_image_usecase.dart';
 import 'package:search_images/domain/usecases/get_search_image_usecase.dart';
 import 'package:search_images/presentation/bloc/search/search_bloc.dart';
 
+import 'search_bloc_test.mocks.dart';
+
 // https://github.com/dart-lang/mockito/blob/master/NULL_SAFETY_README.md
-class MockSearchImageRepository extends Mock implements SearchImageRepository {
-  Either<Failure, List<SearchImage>> images = right([]);
-  @override
-  Future<Either<Failure, List<SearchImage>>> call(NoParams params) async {
-    return images;
-  }
-}
-class MockCachedImageRepository extends Mock implements CachedImageRepository {
-  Either<Failure, List<SearchImage>> images = right([]);
-
-  @override
-  Future<Either<Failure, List<SearchImage>>> call(Params params) async {
-    return images;
-  }
-}
-
+@GenerateNiceMocks([
+  MockSpec<SearchImageRepository>(),
+  MockSpec<CachedImageRepository>(),
+  MockSpec<GetSearchImageUsecase>(),
+  MockSpec<GetCachedImageUsecase>(),
+])
 void main() {
   late SearchBloc bloc;
   late GetSearchImageUsecase getSearchImageUsecase;

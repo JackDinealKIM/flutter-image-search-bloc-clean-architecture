@@ -20,10 +20,32 @@ class Loaded extends SearchState {
 
   @override
   List<Object> get props => [images, page];
+
+  Loaded copyWith({
+    List<SearchImage>? images,
+    int? page,
+  }) {
+    return Loaded(
+      images: images ?? this.images,
+      page: page ?? this.page,
+    );
+  }
+
+  Loaded copyWithAppend({
+    required List<SearchImage> images,
+    int? page,
+  }) {
+    this.images.addAll(images);
+    return Loaded(
+      images: this.images,
+      page: page ?? this.page,
+    );
+  }
 }
 
 class Error extends SearchState {
   final String message;
+
 
   Error(this.message);
 

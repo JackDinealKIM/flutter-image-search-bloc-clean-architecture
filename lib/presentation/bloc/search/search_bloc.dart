@@ -10,6 +10,8 @@ import '../../../core/error/failures.dart';
 import '../../../core/usecases/usecase.dart';
 import '../../../domain/usecases/get_cached_image_usecase.dart';
 import '../../../domain/usecases/get_search_image_usecase.dart';
+import '../favorite/favorite_bloc.dart';
+import 'search_bloc.dart';
 
 part 'search_event.dart';
 
